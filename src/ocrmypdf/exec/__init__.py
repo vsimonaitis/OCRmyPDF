@@ -72,7 +72,7 @@ def run(args, *, env=None, **kwargs):
     if os.name == 'nt':
         paths = os.pathsep.join(os.get_exec_path(env))
         if not shutil.which(args[0], path=paths):
-            shimmed_path = shim_paths_with_program_files(env.copy())
+            shimmed_path = shim_paths_with_program_files(env)
             new_args0 = shutil.which(args[0], path=shimmed_path)
             if new_args0:
                 args[0] = new_args0
@@ -122,9 +122,7 @@ def get_version(program, *, version_arg='--version', regex=r'(\d+(\.\d+)*)', env
     return version
 
 
-@lru_cache(maxsize=1)
-def shim_paths_with_program_files(copy_of_env=None):
-    env = copy_of_env
+def shim_paths_with_program_files(env=None):
     if not env:
         env = os.environ
     program_files = env.get('PROGRAMFILES', '')
@@ -135,7 +133,7 @@ def shim_paths_with_program_files(copy_of_env=None):
         for dirname in os.listdir(program_files):
             if dirname.lower() == 'tesseract-ocr':
                 paths.append(os.path.join(program_files, dirname))
-            if dirname.lower() == 'gs':
+            elif dirname.lower() == 'gs':
                 try:
                     latest_gs = max(
                         os.listdir(os.path.join(program_files, dirname)),
