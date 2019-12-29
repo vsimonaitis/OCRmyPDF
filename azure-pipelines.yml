@@ -36,7 +36,6 @@ stages:
               refreshenv
               pip install --upgrade pip wheel
               pip install -r requirements/main.txt -r requirements/test.txt .
-              tesseract --version
             displayName: "Install Python packages"
           - pwsh: |
               refreshenv
