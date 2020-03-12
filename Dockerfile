@@ -35,6 +35,8 @@ COPY . /app
 
 WORKDIR /app
 
+RUN ls
+
 RUN pip3 install --no-cache-dir \
   -r requirements/main.txt \
   -r requirements/webservice.txt \
